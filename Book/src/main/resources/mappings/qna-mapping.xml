@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="QnaDAO">
+	<select id="getQnaList" parameterType="hashMap" resultType="qna">
+		<![CDATA[
+		SELECT qseq,id,qna_title,qna_content,reply,rep,indate
+		FROM
+		(SELECT rn,qseq,id,qna_title,qna_content,reply,rep,indate
+			FROM
+			(SELECT row_number() over (ORDER BY qseq*1 DESC) rn,qseq,id,qna_title,qna_content,reply,rep,indate
+				FROM qna
+				WHERE id LIKE '%'||#{id}||'%'
+				ORDER BY qseq*1 DESC)
+				WHERE rn <= #{criteria.pageNum} * #{criteria.numPerPage})
+			WHERE rn > (#{criteria.pageNum}-1) * #{criteria.numPerPage}
+	]]>
+	</select>
+	
+	<select id="countQna" resultType="int">
+		SELECT COUNT(*) FROM qna
+		WHERE id LIKE '%'||#{id}||'%'
+	</select>
+	
+	<select id="getQna" resultType="qna">
+		SELECT * FROM qna
+		WHERE qseq=#{qseq}
+	</select>
+	
+	<select id="selectMaxQseq" resultType="int">
+		SELECT NVL2(MAX(qseq),MAX(qseq*1)+1,1) FROM qna
+	</select>
+	
+	<insert id="insertQna">
+		INSERT INTO qna(qseq,id,qna_title,qna_content,indate)
+		VALUES(#{qseq},#{id},#{qna_title},#{qna_content},SYSDATE)
+	</insert>
+	
+	<delete id="deleteQna">
+		DELETE qna
+		WHERE qseq=#{qseq}
+	</delete>
+	
+	<!--admin: qna 보기 -->
+	<select id="adminGetQna" resultType="qna">
+		SELECT * FROM qna
+		WHERE qseq=#{qseq}
+	</select>
+	
+	<!--admin: 총 문의글 개수 -->
+	<select id="countQnaList" resultType="int">
+		SELECT COUNT(*) FROM qna
+		WHERE id LIKE '%'||#{key}||'%'
+	</select>
+	
+	
+	<!--admin: 게시판 답변 처리 -->
+	<update id="updateQna">
+		UPDATE qna
+		SET reply=#{reply}, rep='Y'
+		WHERE qseq=#{qseq}
+	</update>
+</mapper>

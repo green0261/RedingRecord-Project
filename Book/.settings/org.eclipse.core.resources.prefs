@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//src/main/java/com/book/record/post/PostService.java=UTF-8
+encoding//src/main/java/com/book/record/post/impl/PostDAO.java=UTF-8
+encoding//src/main/java/com/book/record/post/impl/PostServiceImpl.java=UTF-8
+encoding//src/main/java/com/book/view/controller/AdminController.java=UTF-8
+encoding//src/main/java/com/book/view/controller/HomeController.java=UTF-8
+encoding//src/main/java/com/book/view/controller/MemberController.java=UTF-8
+encoding//src/main/java/com/book/view/controller/PostController.java=UTF-8
+encoding//src/main/java/com/book/view/controller/QnaController.java=UTF-8
+encoding//src/main/webapp/WEB-INF/views/admin/css/admin.css=UTF-8
+encoding//src/main/webapp/WEB-INF/views/admin/header.jsp=UTF-8

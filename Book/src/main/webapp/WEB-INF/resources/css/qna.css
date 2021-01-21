@@ -1,0 +1,25 @@
+@charset "EUC-KR";
+/* qnaList부분 */
+article#qna h2{
+	position:relative;
+	left:38%;
+	margin: 0 0 1em 0;
+}
+table#qna{
+	border: solid 1px rgba(160, 160, 160, 0.3);
+	width: 900px;
+	
+}
+table#qna tr,table#qna th,table#qna td{
+	border: solid 1px rgba(160, 160, 160, 0.3);
+}
+table#qna th,table#qna th{
+	text-align:center;
+	padding: 0.2em 0 0.2em 0;
+}
+
+/* 페이지 부분 */
+div.qna_page{
+	position:relative;
+	left:50%;
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberDAO">
+
+	<select id="getMember" resultType="member">
+		SELECT * FROM member
+		WHERE id=#{id} AND password=#{password} AND useyn='Y'
+	</select>
+	
+	<update id="updateMember" parameterType="member">
+		UPDATE member
+		SET password=#{password},nick_name=#{nick_name},email=#{email},image=#{image}
+		WHERE id=#{id}
+	</update>
+	
+	<select id="findMemberById" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM member
+		WHERE id=#{id}
+	</select>
+	
+	<select id="getMemberById" parameterType="member" resultType="member">
+		SELECT * FROM member
+		WHERE id=#{id}
+	</select>
+	
+	<select id="getMemberByNameAndEmail" resultType="member">
+		SELECT * FROM member
+		WHERE name=#{name} AND email=#{email}
+	</select>
+	
+	<select id="findPassword" resultType="member">
+		SELECT * FROM member
+		WHERE id=#{id} AND name=#{name} AND email=#{email}
+	</select>
+		
+	<insert id="insertMember" parameterType="member">
+		INSERT INTO member(id,password,name,nick_name,email)
+		VALUES(#{id},#{password},#{name},#{nick_name},#{email})
+	</insert>
+
+	<update id="updateUseyn" parameterType="member">
+		UPDATE member
+		SET useyn='N'
+		WHERE id=#{id}
+	</update>
+	
+	<insert id="addFriend" parameterType="hashMap">
+		INSERT INTO friend(id,f_id)
+    	SELECT #{id}, #{f_id} FROM DUAL
+    	WHERE 0 = (SELECT COUNT(*) FROM friend WHERE id=#{id} AND f_id=#{f_id})
+	</insert>
+	
+	
+	<!-- Admin: 회원 리스트 -->
+	<select id="getMemberList" parameterType="hashMap" resultType="member">
+		<![CDATA[
+		SELECT id, name, nick_name, email, useyn, regdate
+			FROM
+			(SELECT rn,id, name, nick_name, email, useyn, regdate
+				FROM
+				(SELECT row_number() over (ORDER BY name) rn, id, name, nick_name, email, useyn, regdate
+				FROM member
+				WHERE id LIKE '%'||#{key}||'%'
+				ORDER BY name)
+				 WHERE rn <= #{cri.pageNum} * #{cri.numPerPage})
+			WHERE rn > (#{cri.pageNum} -1) * #{cri.numPerPage}
+	]]>
+	</select>
+	
+	<!-- Admin: 회원수 -->
+	<select id="countMemberList" resultType="int">
+		SELECT COUNT(*) FROM member
+		WHERE id LIKE '%'||#{key}||'%'
+		ORDER BY regdate DESC
+	</select>
+</mapper>

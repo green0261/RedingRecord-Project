@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PostDAO">
+	<select id="getPostList" resultType="post">
+		<![CDATA[
+		SELECT * FROM
+        (SELECT A.id,A.pseq, A.post_title,A.p_content,B.title,C.nick_name
+        FROM post A,book B,member C
+        WHERE A.isbn = B.isbn
+        AND A.id = C.id
+        ORDER BY A.regdate DESC)
+        WHERE ROWNUM <= 5
+		]]>
+</select>
+	
+	<select id="getPost" resultType="post">
+		SELECT A.pseq, A.id, A.post_title, A.p_content,A.readyn, A.regdate,
+        D.nick_name,
+        B.title, B.author, B.cover, B.pubDate,B.publisher
+        FROM post A, book B, member D
+    		WHERE A.isbn = B.isbn
+    		AND A.id = D.id
+    		AND A.pseq=#{pseq}
+	</select>
+	
+	<select id="getRecordByPseq" resultType="record">
+		SELECT a.rseq,a.page,a.content,a.regdate,b.id
+        FROM record a, post b
+        WHERE a.pseq=#{pseq}
+        AND a.pseq = b.pseq
+        ORDER BY a.regdate
+	</select>
+	
+	<select id="getCoverList" resultType="post">
+		<![CDATA[
+	    	SELECT * FROM
+			(SELECT A.pseq,B.cover
+			FROM post A, book B
+			WHERE A.id = #{id}
+			AND A.isbn = B.isbn
+			ORDER BY A.regdate DESC)
+			WHERE ROWNUM <= 8
+		]]>
+	</select>
+	
+	<select id="getRecordList" resultType="record">
+		<![CDATA[
+		SELECT A.pseq,A.page,A.content,B.id 
+		FROM record A,post B
+		WHERE A.pseq = B.pseq
+		AND B.id = #{id}
+		ORDER BY A.regdate DESC
+		]]>
+		</select>
+	
+	<select id="getBookByReadyn" parameterType="hashMap" resultType="post">
+	<![CDATA[
+		SELECT DISTINCT pseq,cover,regdate,readyn,post_title
+		FROM
+		(SELECT rn,pseq,cover,regdate,readyn,post_title
+			FROM
+			(SELECT row_number() over (ORDER BY regdate DESC) rn,pseq,cover,regdate,readyn,post_title
+				FROM post_view
+				WHERE id=#{postVO.id}
+				AND readyn LIKE '%'||#{postVO.readyn}||'%'
+				ORDER BY regdate DESC)
+				WHERE rn <= #{criteria.pageNum} * #{criteria.numPerPage})
+			WHERE rn > (#{criteria.pageNum}-1) * #{criteria.numPerPage}
+			ORDER BY regdate DESC
+	]]>
+	</select>
+		
+	<!-- 조회할 post 개수 -->
+	<select id="countPostList" parameterType="post" resultType="int">
+		SELECT COUNT(*) FROM post_view
+		WHERE id=#{id}
+		AND readyn LIKE '%'||#{readyn}||'%'
+	</select>
+	
+	<select id="countSearchedPost" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		post A, book B, member C
+		WHERE A.isbn = B.isbn
+		AND A.id = C.id
+		AND B.title LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="deletePost">
+		DELETE post
+		WHERE pseq=#{pseq}
+	</delete>
+	
+	<update id="updatePost">
+		UPDATE post
+		SET post_title=#{post_title},p_content=#{p_content},readyn=#{readyn}
+		WHERE pseq=#{pseq}
+	</update>
+	
+	<!-- 책갈피 수정 -->
+	<update id="updateRecord">
+		UPDATE record
+		SET page=#{page},content=#{content}
+		WHERE rseq=#{rseq}
+	</update>
+	
+	<!-- 책갈피 일련번호로 책갈피 가져오기 -->
+	<select id="getRecord" resultType="record">
+		SELECT a.rseq,a.page,a.content,a.regdate,b.id
+        FROM record a, post b
+        WHERE a.rseq=#{rseq}
+        AND a.pseq = b.pseq
+	</select>
+	
+	<!-- 리뷰 작성 -->
+	<insert id="insertPost">
+		INSERT INTO post
+		VALUES(pseq_seq.nextval,#{id},#{post_title},#{isbn},#{readyn},SYSDATE,#{p_content})
+	</insert>
+	
+	<!-- 책갈피 작성 -->
+	<select id="insertRecord" resultType="int">
+		INSERT INTO record
+		VALUES(rseq_seq.nextval,#{pseq},#{page},#{content},SYSDATE)
+	</select>
+	
+	<!-- 한 리뷰에 해당하는 책갈피들 삭제하기 -->
+	<delete id="deleteRecordByPseq">
+		DELETE record
+		WHERE pseq=#{pseq}
+	</delete>
+	
+	<!-- 책갈피 일련번호로 책갈피 삭제 -->
+	<delete id="deleteRecord">
+		DELETE record
+		WHERE rseq=#{rseq}
+	</delete>
+	
+	<!-- 검색 기능 -->
+	<select id="getPostListByKeyword" resultType="post">
+		<![CDATA[
+		SELECT id,post_title,regdate,pseq,title,nick_name
+			FROM
+				(SELECT rn,id,post_title,regdate,pseq,title,nick_name
+					FROM(
+						SELECT row_number() over (ORDER BY A.regdate) rn,A.id,A.post_title,A.regdate,A.pseq,
+							B.title,
+							C.nick_name
+								FROM
+									post A, book B, member C
+									WHERE A.isbn = B.isbn
+									AND A.id = C.id
+									AND B.title LIKE '%'||#{keyword}||'%'
+									ORDER BY A.regdate DESC)
+				WHERE rn <= #{criteria.pageNum} * #{criteria.numPerPage})
+			WHERE rn > (#{criteria.pageNum}-1) * #{criteria.numPerPage}
+		]]>
+	</select>
+	
+	<!-- 친구 리뷰 가져오기 -->
+	<select id="getFriendPost" parameterType="hashMap" resultType="post">
+		<![CDATA[
+			SELECT id,post_title,pseq,regdate,days,title,cover,nick_name
+                FROM
+                (SELECT rn,id,post_title,pseq,regdate,days,title,cover,nick_name
+                FROM
+                (select row_number() over(ORDER BY A.regdate DESC) AS rn, B.f_id AS id,A.post_title,A.pseq,A.regdate,trunc(sysdate)-trunc(A.regdate) as days,C.title,C.cover,D.nick_name
+                from post A, friend B,book C, member D
+                WHERE B.id = #{id}
+                AND B.f_id = A.id
+                AND A.isbn = C.isbn
+                AND A.id = D.id
+                AND MONTHS_BETWEEN(SYSDATE,A.regdate)<=1
+                ORDER BY A.regdate DESC)
+                WHERE rn <= #{endNum})
+                WHERE rn > #{startNum}
+		]]>
+	</select>
+	
+	<resultMap type="com.book.record.book.LibraryStatistics" id="libraryMap">
+		<result column="month" property="month"/>
+		<result column="count" property="count"/>
+	</resultMap>
+
+	<select id="getLibraryStatistics" parameterType="hashMap" resultMap="libraryMap">
+		SELECT COUNT(TO_CHAR(regdate,'MM')) AS count, TO_CHAR(regdate,'MM') AS month
+			FROM post_view
+			WHERE id=#{id}
+			AND TO_CHAR(regdate,'YYYY')=#{year}
+			GROUP BY TO_CHAR(regdate,'MM')
+	</select>
+	
+	<resultMap type="com.book.record.book.ReadynStatistics" id="readynMap">
+		<result column="readyn" property="readyn"/>
+		<result column="count" property="count"/>
+	</resultMap>
+	
+	<select id="getReadynStatistics" parameterType="hashMap" resultMap="readynMap">
+		SELECT COUNT(readyn) AS count, readyn
+		FROM post
+		WHERE id=#{id}
+		AND TO_CHAR(regdate,'YYYY')=#{year}
+		GROUP BY readyn
+	</select>
+	
+</mapper>

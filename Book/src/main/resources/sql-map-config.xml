@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.book.record.member.MemberVO" alias="member"></typeAlias>
+		<typeAlias type="com.book.record.post.PostVO" alias="post"></typeAlias>
+		<typeAlias type="com.book.record.post.RecordVO" alias="record"></typeAlias>
+		<typeAlias type="com.book.record.comment.CommentVO" alias="comment"></typeAlias>
+		<typeAlias type="com.book.record.book.BookVO" alias="book"></typeAlias>
+		<typeAlias type="com.book.record.qna.QnaVO" alias="qna"></typeAlias>
+		<typeAlias type="com.book.record.admin.AdminVO" alias="admin"></typeAlias>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="mappings/member-mapping.xml"/>
+		<mapper resource="mappings/post-mapping.xml"/>
+		<mapper resource="mappings/comment-mapping.xml"/>
+		<mapper resource="mappings/book-mapping.xml"/>
+		<mapper resource="mappings/qna-mapping.xml"/>
+		<mapper resource="mappings/admin-mapping.xml"/>
+	</mappers>
+	
+</configuration>
+
+
+
+

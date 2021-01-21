@@ -1,0 +1,108 @@
+@charset "UTF-8";
+
+/* 리뷰 제목 부분 */
+#p_title{
+	border-bottom:1px solid rgba(160, 160, 160, 0.3);
+}
+.post header .meta{
+	border-left:red;
+}
+/* 리뷰 내용 부분 */
+div#p_content{
+	border-top:1px solid rgba(160, 160, 160, 0.3);
+	border-bottom:1px solid rgba(160, 160, 160, 0.3);
+	background-color:#ffffff;
+	margin: 1em 0 1em 0;
+	padding: 4em;
+}
+
+.post img{
+	width:183px;
+	height: 249px;	
+}
+/*리뷰 삭제 메뉴*/
+ul.stats{
+	text-align:right;
+	list-style:none;
+}
+/* 책갈피 부분 */
+section#records{
+	margin: 3em 0 2em 0;
+	padding-bottom: 2em;
+}
+section#records header{
+	display:flex;
+	flex-direction:row;
+	margin-bottom: 2em;
+}
+section#records h3{
+	width: 130px;
+}
+#records .posts{
+	display:flex;
+	flex-direction:column;
+	border:1px solid rgba(160, 160, 160, 0.3);
+	text-align:center;
+}
+
+.record h5{
+	text-align:right;
+}
+
+#record_form {
+	display:none;
+}
+ul.posts li.record{
+	padding: 1em 1em 1em 1em;
+}
+
+ul.posts li.record:hover{
+	background-color:#f4f4f4;
+	cursor:pointer;
+}
+
+/* 댓글 부분 */	
+#comments textarea{
+	width: 80%;
+}
+
+#comments h3{
+	width:80px;
+}
+
+#comments header{
+	display:flex;
+	flex-direction:row;
+}
+
+.comment table{
+	style:none;
+	text-align:left;
+	background-color:white;
+}
+
+.comment .right{
+	text-align:right;
+}
+
+#comments form{
+	width: 100%;
+}
+
+.comment tr{
+	padding: 3em 3em 1em 3em;
+	margin: 0 0 1em 0;
+}
+
+.commment a{
+	padding: 3em 3em 1em 3em;
+}
+
+.comment .deleteBtn{
+	cursor:pointer;
+	color: rgba(160, 160, 160, 0.3);
+}
+
+span.bold{
+	font-weight:bold;
+}
