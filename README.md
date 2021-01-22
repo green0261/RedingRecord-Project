@@ -38,10 +38,15 @@
 **2. 개발환경**
 
 운영 체제: window10
+
 IDE: Eclipse
+
 프로그래밍 언어: JAVA, JavaScript, Jquery
+
 Back-end: Spring Framework ,myBatis, Tomcat
+
 Front-end: HTML5, CSS3
+
 Data-Base: Oracle
 
 
@@ -94,6 +99,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 }
 ```
 ---
+
 - **Ajax를 이용한 아이디 중복 체크**
 
 ![중복체크](https://user-images.githubusercontent.com/74645087/105443879-1fa77600-5cb0-11eb-8abd-0e08cdd0c6c6.PNG)
@@ -151,6 +157,7 @@ function id_check(){
 ```
 
 ---
+
 - **알라딘api를 통한 도서 검색**
 
 ![검색](https://user-images.githubusercontent.com/74645087/105445886-5c756c00-5cb4-11eb-8628-98be4c0cac26.PNG)
@@ -258,6 +265,7 @@ function bookDisplay(success,data){
 }
 ```
 ---
+
 - **부모창에 선택한 도서 정보 출력**
 
 사용자가 출력된 도서 목록 중 원하는 도서를 선택하면 리뷰 작성 페이지에 사용자가 선택한 도서의 데이터가  출력됩니다.
@@ -291,6 +299,7 @@ function add_book(num){
 }
 ```
 ---
+
 - **구글 차트를 이용한 통계**
 
 구글 차트를 이용하여 사용자가 한 해 동안 남긴 리뷰의 개수와 완독,미완독 책의 비율을 확인할 수 있도록 하였습니다. 사용자가 버튼을 클릭하면 ajax를 통해 통계에 필요한 정보를 가져오는 Controller가 호출되고, 해당 Controller에서 데이터베이스에서 가져온 데이터를 json타입으로 반환해주게 됩니다.
@@ -441,7 +450,8 @@ function drawPieChart(result) {
 	piechart.draw(data, piechart_options);
 }
 ```
-**4. 프로젝트 설명**
+
+**4. 마무리하며**
 
 - 보완점
 
