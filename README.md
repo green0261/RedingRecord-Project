@@ -1,5 +1,6 @@
 # RedingRecord-Project
 이름 : 이재진
+
 이메일 :  wowls09@naver.com
 
 # 목차
