@@ -1,7 +1,4 @@
 # RedingRecord-Project
-이름 : 이재진
-
-이메일 :  wowls701@naver.com
 
 # 목차
  **1. 프로젝트 소개**
